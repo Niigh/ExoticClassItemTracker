@@ -6,6 +6,11 @@
     "sharp": "^0.33.4"
   },
   "scripts": {
-    "start": "set NODE_ENV=dev && node app.js"
+    "start": "ts-node app.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3"
   }
 }

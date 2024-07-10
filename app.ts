@@ -37,6 +37,8 @@ async function getInventory() {
         
         // Iterate all characters' inventories to check for tracked items
         for (const characterId in characterInventories) {
+            // TODO THS - It's only checking character's inventories, maybe try to include vault (to mitigate the person using DIM).
+            console.log(characterId);
             for (const item of characterInventories[characterId].items) {
                 if (TRACKED_ITEM_HASHES.includes(item.itemHash)) {
                     CurrentInventory.push(item.itemInstanceId)
@@ -75,7 +77,7 @@ async function getInventory() {
                     const perkName = response.data.Response.displayProperties.name;
                     const iconPath = response.data.Response.displayProperties.icon;
 
-                    // check if perkname contains "Sprit of"
+                    // Check if perkname contains "Sprit of"
                     if (perkName.includes("Spirit of")) {
                         perks.push({
                             "perkName": perkName,
@@ -121,18 +123,18 @@ async function getInventory() {
                         height: 96,
                     }))
                 ) 
-                .toFile(__dirname + '/output.png');
+                .toFile(__dirname + '/assets/output.png');
                 
                 const embed = new MessageBuilder()
-                .setAuthor('New Class Item')
-                .addField("Perk 1", perks[0].perkName, true)
-                .addField("Perk 2", perks[1].perkName, true)
-                .setColor('#dbd0bf')
-                .setTimestamp()
-                .setImage(await uploadImage(__dirname + '/output.png'));
+                    .setAuthor('New Class Item')
+                    .addField("Perk 1", perks[0].perkName, true)
+                    .addField("Perk 2", perks[1].perkName, true)
+                    .setColor('#dbd0bf')
+                    .setTimestamp()
+                    .setImage(await uploadImage(__dirname + '/assets/output.png'));
 
                 console.log('| Sending Webhook embed ...');
-                lDiscordHook.send(embed).then(res => {
+                lDiscordHook.send(embed).then(() => {
                     console.log('| Webhook embed sent.');
                 })
             }
@@ -155,10 +157,10 @@ const embed = new MessageBuilder()
     .setColor('#d1f598')
     .setTimestamp()
 
-lDiscordHook.send(embed).then(r => {
+lDiscordHook.send(embed).then(() => {
     console.log('Started tracking ...');
 })
 
-// Build current inventory before waiting X minutes ti check again
+// Build current inventory before waiting X minutes to check again
 getInventory();
 setInterval(getInventory, REQUEST_INTERVAL * 60 * 1000);
