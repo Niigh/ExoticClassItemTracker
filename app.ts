@@ -1,22 +1,22 @@
-const fs= require('fs');
-const axios= require('axios');
-const sharp= require('sharp');
+const fs = require('fs');
+const axios = require('axios');
+const sharp = require('sharp');
 const { Webhook, MessageBuilder } = require('discord-webhook-node');
-const { download, uploadImage } = require("./utils/fileRequest");
+const { download, uploadImage } = require('./utils/fileRequest');
 
 require('dotenv').config();
 
 const WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL; // Discord Webhook URL
-const API_KEY     = process.env.BUNGIE_API_KEY; // Bungie API Key
+const API_KEY = process.env.BUNGIE_API_KEY; // Bungie API Key
 
-const MEMBERSHIP_TYPE = "3"; // 1 = Xbox, 2 = PSN, 3 = Steam,
-const MEMBERSHIP_ID   = process.env.BUNGIE_MEMBERSHIP_ID; // Bungie Acc Id
+const MEMBERSHIP_TYPE = '3'; // 1 = Xbox, 2 = PSN, 3 = Steam,
+const MEMBERSHIP_ID = process.env.BUNGIE_MEMBERSHIP_ID; // Bungie Acc Id
 const REQUEST_INTERVAL = 10; // How many minutes between each inventory check
 
 const TRACKED_ITEM_HASHES = [
     2809120022, // Relativism
-    266021826,  // Stoicism
-    2273643087, // Solipsism
+    266021826, // Stoicism
+    2273643087 // Solipsism
 ];
 
 const lDiscordHook = new Webhook(WEBHOOK_URL);
@@ -27,21 +27,21 @@ async function getInventory() {
         console.log('/- Checking inventory -/');
         const response = await axios.get(`https://www.bungie.net/Platform/Destiny2/${MEMBERSHIP_TYPE}/Profile/${MEMBERSHIP_ID}/?components=201,302`, {
             headers: {
-                'X-API-Key': API_KEY,
+                'X-API-Key': API_KEY
             }
         });
 
         const characterInventories = response.data.Response.characterInventories.data;
         const itemPerks = response.data.Response.itemComponents.perks.data;
-        let CurrentInventory = []
-        
+        let CurrentInventory = [];
+
         // Iterate all characters' inventories to check for tracked items
         for (const characterId in characterInventories) {
             // TODO THS - It's only checking character's inventories, maybe try to include vault (to mitigate the person using DIM).
             console.log(characterId);
             for (const item of characterInventories[characterId].items) {
                 if (TRACKED_ITEM_HASHES.includes(item.itemHash)) {
-                    CurrentInventory.push(item.itemInstanceId)
+                    CurrentInventory.push(item.itemInstanceId);
                 }
             }
         }
@@ -70,7 +70,7 @@ async function getInventory() {
                     // Fetch perk data (name and icon)
                     const response = await axios.get(`https://www.bungie.net/Platform/Destiny2/Manifest/DestinySandboxPerkDefinition/${perk.perkHash}/`, {
                         headers: {
-                            'X-API-Key': API_KEY,
+                            'X-API-Key': API_KEY
                         }
                     });
 
@@ -78,12 +78,12 @@ async function getInventory() {
                     const iconPath = response.data.Response.displayProperties.icon;
 
                     // Check if perkname contains "Sprit of"
-                    if (perkName.includes("Spirit of")) {
+                    if (perkName.includes('Spirit of')) {
                         perks.push({
-                            "perkName": perkName,
-                            "iconPath": iconPath,
-                            "perkHash": perk.perkHash,
-                        })
+                            perkName: perkName,
+                            iconPath: iconPath,
+                            perkHash: perk.perkHash
+                        });
                     }
                 }
 
@@ -96,39 +96,39 @@ async function getInventory() {
                 for (const perk of perks) {
                     const imagePath = __dirname + `/assets/perk_images/${perk.perkHash}.png`;
                     if (!fs.existsSync(imagePath)) {
-                       // Download image & cache it
-                       await download(`https://www.bungie.net${perk.iconPath}`, __dirname + `/assets/perk_images/${perk.perkHash}.png`).catch(console.error);
+                        // Download image & cache it
+                        await download(`https://www.bungie.net${perk.iconPath}`, __dirname + `/assets/perk_images/${perk.perkHash}.png`).catch(console.error);
                     }
                 }
 
                 // Stitch images together and upload to uguu.se (temporary file uploader)
                 const images = [
                     fs.readFileSync(__dirname + `/assets/perk_images/${perks[0].perkHash}.png`),
-                    fs.readFileSync(__dirname + `/assets/perk_images/${perks[1].perkHash}.png`),
-                ]
+                    fs.readFileSync(__dirname + `/assets/perk_images/${perks[1].perkHash}.png`)
+                ];
                 await sharp({
                     create: {
-                        width: 96*2 + 75,
+                        width: 96 * 2 + 75,
                         height: 96,
                         channels: 4,
-                        background: { r: 0, g: 176, b: 244, alpha: 0 },
-                    },
+                        background: { r: 0, g: 176, b: 244, alpha: 0 }
+                    }
                 })
-                .composite(
-                    images.map((image, index)=>({
-                        input: image,
-                        left: (index)*(96 + 75),
-                        top: Math.floor(index/100),
-                        width: 96,
-                        height: 96,
-                    }))
-                ) 
-                .toFile(__dirname + '/assets/output.png');
-                
+                    .composite(
+                        images.map((image, index) => ({
+                            input: image,
+                            left: index * (96 + 75),
+                            top: Math.floor(index / 100),
+                            width: 96,
+                            height: 96
+                        }))
+                    )
+                    .toFile(__dirname + '/assets/output.png');
+
                 const embed = new MessageBuilder()
                     .setAuthor('New Class Item')
-                    .addField("Perk 1", perks[0].perkName, true)
-                    .addField("Perk 2", perks[1].perkName, true)
+                    .addField('Perk 1', perks[0].perkName, true)
+                    .addField('Perk 2', perks[1].perkName, true)
                     .setColor('#dbd0bf')
                     .setTimestamp()
                     .setImage(await uploadImage(__dirname + '/assets/output.png'));
@@ -136,7 +136,7 @@ async function getInventory() {
                 console.log('| Sending Webhook embed ...');
                 lDiscordHook.send(embed).then(() => {
                     console.log('| Webhook embed sent.');
-                })
+                });
             }
         }
 
@@ -151,15 +151,11 @@ async function getInventory() {
     }
 }
 
-
-const embed = new MessageBuilder()
-    .setAuthor('Starting to track exotic class item drop.')
-    .setColor('#d1f598')
-    .setTimestamp()
+const embed = new MessageBuilder().setAuthor('Starting to track exotic class item drop.').setColor('#d1f598').setTimestamp();
 
 lDiscordHook.send(embed).then(() => {
     console.log('Started tracking ...');
-})
+});
 
 // Build current inventory before waiting X minutes to check again
 getInventory();

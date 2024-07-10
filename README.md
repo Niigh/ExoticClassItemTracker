@@ -2,18 +2,15 @@
 
 ## Overview
 
-Tracks new Class Items Acquired and the perks they rolled.
-Feel free to read the comments of the index file to learn how this works (Caches perk icons, stitches them to gether and uploads to a temp file host for the discord embed)
+Tracks new Class Items Acquired and the perks they rolled. Feel free to read the comments of the index file to learn how this works (Caches perk icons, stitches them to gether and uploads to a temp file host for the discord embed)
 
 ![image](https://github.com/nyzuu/Destiny2API/assets/45524358/7b362ff8-1a64-4b98-b56c-ee31a3c28290)
-
 
 ## IMPORTANT
 
 This doesn't use bungie's OAuth2, so you need to enable `Show my non-equipped inventory` [https://www.bungie.net/7/en/User/Account/Privacy]
 
 ![image](https://github.com/nyzuu/Destiny2API/assets/45524358/ec131f2a-bb67-4e34-8a1a-b84e5d9f0bff)
-
 
 ## Getting Started
 
@@ -27,14 +24,9 @@ To get started, follow these steps:
 
 ## Usage
 
-Modify the variables in the `app.ts` file:
-`REQUEST_INTERVAL` - Not required to change, default is 25 minutes
-`MEMBERSHIP_TYPE` - Bungie account type.
-`MEMBERSHIP_ID` - Bungie account ID.
+Modify the variables in the `app.ts` file: `REQUEST_INTERVAL` - Not required to change, default is 25 minutes `MEMBERSHIP_TYPE` - Bungie account type. `MEMBERSHIP_ID` - Bungie account ID.
 
-Both Type and ID can be found on your profile url. (Bungie.com > view profile)
-![image](https://github.com/nyzuu/Destiny2API/assets/45524358/5cba13b0-fc62-416b-a006-1a5ba08ddfab)
-
+Both Type and ID can be found on your profile url. (Bungie.com > view profile) ![image](https://github.com/nyzuu/Destiny2API/assets/45524358/5cba13b0-fc62-416b-a006-1a5ba08ddfab)
 
 ## Contributing
 

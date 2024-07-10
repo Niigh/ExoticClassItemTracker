@@ -1,7 +1,7 @@
-const axios = require("axios");
-const FormData = require("form-data");
-const fs = require("fs");
-const client = require("https");
+const axios = require('axios');
+const FormData = require('form-data');
+const fs = require('fs');
+const client = require('https');
 
 function download(url, filepath) {
     return new Promise((resolve, reject) => {
@@ -33,4 +33,4 @@ const uploadImage = async (filePath) => {
     }
 };
 
-module.exports = { download, uploadImage }
+module.exports = { download, uploadImage };
