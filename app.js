@@ -19,9 +19,6 @@ const TRACKED_ITEM_HASHES = [
     2273643087, // Solipsism
 ];
 
-console.log(MEMBERSHIP_TYPE);
-console.log(MEMBERSHIP_ID);
-console.log(API_KEY);
 const lDiscordHook = new Webhook(WEBHOOK_URL);
 const lInventoryFilePath = __dirname + '/data/inventory.json';
 
