@@ -95,7 +95,7 @@ async function getInventory() {
                     const imagePath = __dirname + `/assets/perk_images/${perk.perkHash}.png`;
                     if (!fs.existsSync(imagePath)) {
                        // Download image & cache it
-                       await download(`https://www.bungie.net${perk.iconPath}`, __dirname + `/perk_images/${perk.perkHash}.png`).catch(console.error);
+                       await download(`https://www.bungie.net${perk.iconPath}`, __dirname + `/assets/perk_images/${perk.perkHash}.png`).catch(console.error);
                     }
                 }
 
