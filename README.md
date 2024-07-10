@@ -22,12 +22,12 @@ To get started, follow these steps:
 1. Sign up for a Bungie.net account and obtain an API key (https://www.bungie.net/en/Application , Create a Confidential Application with `Read your Destiny 2 information (Vault, Inventory, and Vendors), as well as Destiny 1 Vault and Inventory data.` Enabled).
 2. Clone this repository to your local machine.
 3. Install the required dependencies by running `npm install`.
-4. Set your API key and Discord Webhook URL in `index.js` file.
-5. Run the application using `node index.js`.
+4. Set your API key and Discord Webhook URL in `app.js` file.
+5. Run the application using `node app.js`.
 
 ## Usage
 
-Modify the variables in the `index.js` file:
+Modify the variables in the `app.js` file:
 `REQUEST_INTERVAL` - Not required to change, default is 25 minutes
 `MEMBERSHIP_TYPE` - Bungie account type.
 `MEMBERSHIP_ID` - Bungie account ID.
