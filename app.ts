@@ -11,7 +11,7 @@ const API_KEY = process.env.BUNGIE_API_KEY; // Bungie API Key
 
 const MEMBERSHIP_TYPE = '3'; // 1 = Xbox, 2 = PSN, 3 = Steam,
 const MEMBERSHIP_ID = process.env.BUNGIE_MEMBERSHIP_ID; // Bungie Acc Id
-const REQUEST_INTERVAL = 10; // How many minutes between each inventory check
+const REQUEST_INTERVAL = 5; // How many minutes between each inventory check
 
 const TRACKED_ITEM_HASHES = [
     2809120022, // Relativism
@@ -38,7 +38,6 @@ async function getInventory() {
         // Iterate all characters' inventories to check for tracked items
         for (const characterId in characterInventories) {
             // TODO THS - It's only checking character's inventories, maybe try to include vault (to mitigate the person using DIM).
-            console.log(characterId);
             for (const item of characterInventories[characterId].items) {
                 if (TRACKED_ITEM_HASHES.includes(item.itemHash)) {
                     CurrentInventory.push(item.itemInstanceId);
